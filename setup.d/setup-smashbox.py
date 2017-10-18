@@ -1,5 +1,6 @@
 from crontab import CronTab
-from sys import platform
+import os
+import sys
 
 ########## Get environment variables ##########
 
@@ -10,7 +11,7 @@ oc_server = os.environ['SMASHBOX_OC_SERVER']
 
 ########## Smashbox config file ##########
 
-os.system("cp ./auto-smashbox.conf ./smashbox/etc/smashbox.conf")
+os.system("cp ./setup.d/auto-smashbox.conf ./smashbox/etc/smashbox.conf")
 f = open('./smashbox/etc/smashbox.conf', 'a')
 
 f.write('oc_account_name =' + '"{}"'.format(oc_account_name) + '\n')
@@ -22,14 +23,12 @@ if oc_server=='cernbox.cern.ch':
 else:
     f.write('oc_ssl_enabled =' + "False" + '\n')
 
-if platform == "linux" or platform == "linux2":  # linux
-    if client_choice == "1": # cernbox
+if sys.platform == "linux" or sys.platform == "linux2":  # linux
         location = os.popen("whereis cernboxcmd").read()
         path = "/" + location.split("cernboxcmd")[1].split(": /")[1] + "cernboxcmd --trust"
-elif platform == "darwin":
+elif sys.platform == "darwin":
         path = "/Applications/cernbox.app/Contents/MacOS/cernboxcmd --trust"
-elif platform == "Windows":
-    if client_choice == "1": # cernbox
+elif sys.platform == "Windows":
         location = os.popen("where cernboxcmd").read()
         path = "/" + location.split("cernboxcmd")[1].split(": /")[1] + "cernboxcmd --trust" # to be changed
 
@@ -40,10 +39,9 @@ f.close()
 
 ########## Set up cron job ############
 
-user = os.popen("echo $USER").read().split("\n")[0]
-my_cron = CronTab(user)
-current_path = os.path.dirname(os.path.abspath(__file__))
-job = my_cron.new(command="python " + current_path + "/smash-run.py")
+#user = os.popen("echo $USER").read().split("\n")[0]
+my_cron = CronTab("root")
+job = my_cron.new(command=sys.executable + " " + "./setup.d/smash-run.py")
 job.setall('00 18 * * *')
 my_cron.write()
 

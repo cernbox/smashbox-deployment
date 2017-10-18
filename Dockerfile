@@ -19,7 +19,9 @@ RUN apt-get update && \
 RUN apt-get install -y git && \
     git clone https://github.com/cernbox/smashbox.git /smashbox && \
     cd /smashbox && \
-    pip install -r requirements.txt 
+    pip install -r requirements.txt && \
+    apt-get install -y curl 	
+
 
 # ----- Install cernbox client ----- #
 
@@ -32,8 +34,8 @@ RUN apt-get install -y apt-transport-https && \
 	
 # ----- Copy setup monitoring scripts ----- #
 
-COPY monit.d /monit.d
+COPY setup.d /setup.d
 
 # ----- Copy setup  ----- #
 
-CMD ["/usr/bin/python2.7"] #, "/setup-smashbox.py"]
+CMD ["/usr/bin/python2.7", "./setup.d/setup-smashbox.py"]
