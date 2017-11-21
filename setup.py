@@ -193,7 +193,7 @@ def smash_run(endpoint):
     print '\033[94m' + "Running smashbox in " +  str(socket.gethostname()) + '\033[0m' + '\n'
     current_path = os.path.dirname(os.path.abspath(__file__))
     try:
-        os.system(sys.executable + " " + current_path + "/smashbox/bin/smash --keep-going -a -d" + current_path + "/smashbox/lib/ -c " + current_path +"/smashbox/etc/smashbox-" + endpoint + ".conf") # run smashbox normally
+        os.system(sys.executable + " " + current_path + "/smashbox/bin/smash --keep-going -a -d " + current_path + "/smashbox/lib/ -c " + current_path +"/smashbox/etc/smashbox-" + endpoint + ".conf") # run smashbox normally
     except:
         print "Smashbox failed: Non-zero exit code after running smashbox with " + endpoint
        # continue with next endpoint
