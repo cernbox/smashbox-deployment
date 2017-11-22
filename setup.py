@@ -12,6 +12,8 @@ import platform
 
 deployment_config_link = "https://cernbox.cern.ch/index.php/s/65BChf3cbz7OoDe/download"
 
+# TODO: This list should be changed including new versions, it depends on the organization and naming convention in /eos/project/cernbox/web
+current_version = "2.3.3"
 # linux, macosx windows
 cbox_v = {
     "2.3.3": ["centos7-cernbox","2.3.3.1807","2.3.3.1110"],
@@ -204,10 +206,16 @@ def install_oc_client(version):
     if platform.system() == "Linux" or platform.system() == "linux2":  # linux
         print '\n' + '\033[94m' + "Installing cernbox client " + version + " for linux" + '\033[0m' + '\n'
         wget.download("http://cernbox.cern.ch/cernbox/doc/Linux/" + cbox_v[version][0]+".repo")
-        shutil.copyfile(cbox_v[version][0] + ".repo", "/etc/yum-puppet.repos.d/cernbox.repo")
+
+        if  version == current_version:
+            cbox_pckg = cbox_v[version][0]
+        else:
+            cbox_pckg = "ownbrander:cernbox"
+
+        shutil.copyfile(cbox_pckg + ".repo", "/etc/yum-puppet.repos.d/cernbox.repo")
         os.system("yum update")
         os.system("yum install cernbox-client -y")
-        os.remove(cbox_v[version][0] + ".repo")
+        os.remove(cbox_pckg + ".repo")
 
     elif platform.system() == "darwin":  # MacOSX
         print '\033[94m' + "Installing cernbox client " + version + " for MAC OSX" + '\033[0m' + '\n'
@@ -326,13 +334,13 @@ def check_oc_client_installation(config):
     """
     occ_path = get_oc_sync_cmd_path()
     if occ_path == "": # cernbox client not installed
-	install_oc_client(config["oc_client"])
+	    install_oc_client(config["oc_client"])
     else:
-   	 version_tuple = ocsync_version(get_oc_sync_cmd_path())
-   	 installed_version = str(version_tuple)[1:-1].replace(", ", ".")
+   	    version_tuple = ocsync_version(get_oc_sync_cmd_path())
+   	    installed_version = str(version_tuple)[1:-1].replace(", ", ".")
 
    	 if (config["oc_client"] != installed_version): # TODO: check if it is needed to unistall previous version
-       	     install_oc_client(config["oc_client"])  # update version
+        install_oc_client(config["oc_client"])  # update version
 
 def setup_config(deployment_config, accounts_info,is_update):
     """ This method installs oc_client and smashbox with the current host and
