@@ -393,21 +393,24 @@ def get_occ_credentials(auth_files):
     """
     authfile = None
     accounts_info = dict()
-    
-    for file in auth_files:
-        try:
-            authfile = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), file), 'rb')
-        except IOError:
-            print "Could not read file:", auth_files
+    if len(auth_files)>0:
+	for file in auth_files:
+	    try:
+               authfile = open(file, 'rb')
+	    except IOError:
+                print "Could not read file:", auth_files
 
-        endpoint = file.split("auth-")[1].rsplit(".")[0]
+	    endpoint = file.split("auth-")[1].rsplit(".")[0]
 
-        accounts_info[endpoint] = {"oc_account_name": "", "oc_account_password": ""}
-        for line in authfile:
-            if line[0:len("oc_account_name = ")] == "oc_account_name = ":
-                accounts_info[endpoint]["oc_account_name"] = line[len("oc_account_name = ")::].rsplit(',')[0]
-            if line[0:len("oc_account_password = ")] == "oc_account_password = ":
-                accounts_info[endpoint]["oc_account_password"] = line[len("oc_account_password = ")::].rsplit(',')[0]
+	    accounts_info[endpoint] = {"oc_account_name": "", "oc_account_password": ""}
+	    for line in authfile:
+	        if line[0:len("oc_account_name = ")] == "oc_account_name = ":
+	           accounts_info[endpoint]["oc_account_name"] = line[len("oc_account_name = ")::].rsplit(',')[0]
+		if line[0:len("oc_account_password = ")] == "oc_account_password = ":
+		   accounts_info[endpoint]["oc_account_password"] = line[len("oc_account_password = ")::].rsplit(',')[0]
+    else:
+	print "At least one auth-default.conf file is required"
+	exit(0)
 
     return accounts_info
 
