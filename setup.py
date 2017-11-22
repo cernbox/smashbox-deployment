@@ -281,20 +281,10 @@ def create_cron_job():
         print '\033[94m' + "Installing cron job at: " + job_time + '\033[0m'  + '\n'
         #user = os.popen("echo $USER").read().split("\n")[0]
 
+        file = open("/etc/cron.d/smashbox.cron")
         import sys
-        from crontab import CronTab
-        my_cron = CronTab("root") # This installation script needs to be run as root
-
-        job_is_updated = False
-        for job in my_cron:
-            if job.comment == 'smashbox-' + current_config['runtime']:
-                job_is_updated = True
-
-        if not job_is_updated: # Install cron job
-            current_path = os.path.dirname(os.path.abspath(__file__))
-            job = my_cron.new(command=sys.executable + " " + os.path.join(os.path.dirname(os.path.abspath(__file__)), "setup.py"), comment='smashbox-' + current_config['runtime'])
-            job.setall(str(job_time))
-            my_cron.write()
+        file.write(job_time + " " + sys.executable + " " + os.path.join(os.path.dirname(os.path.abspath(__file__)), "setup.py"))
+        file.close()
 
     else:
         import sys
