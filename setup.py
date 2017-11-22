@@ -461,7 +461,7 @@ def parse_cmdline_args():
     parser.add_argument("--auth",
                         nargs='+',
                         help='accounts info config file',
-                        default=["auth-default.conf"])
+                        default=["/root/smashbox-deployment/auth-default.conf"])
     return parser
 
 if __name__== '__main__':
@@ -478,7 +478,7 @@ if __name__== '__main__':
         is_update = True
 
     remove_old_folders()
-
+    print(str(args.auth))
     # 1) Load the configutation files ( get updated deployment_architecture if is_update)
     deployment_config, accounts_info = load_config_files(args.auth, is_update)
     # 2) Setup smashbox and oc_client with the new/updated "deployment_architecture" and "auth" configuration
