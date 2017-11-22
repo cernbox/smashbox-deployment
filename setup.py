@@ -332,6 +332,7 @@ def check_oc_client_installation(config):
     """ It checks owncloud client installation and it installs a new
     version (if required)
     """
+    installed_version=""
     occ_path = get_oc_sync_cmd_path()
     if occ_path == "": # cernbox client not installed
         install_oc_client(config["oc_client"])
@@ -378,7 +379,7 @@ def setup_config(deployment_config, accounts_info,is_update):
                     print "ERROR auth-default.conf : At least one valid auth-default.conf file with default owncloud client username and password is required"
                     exit(0)
                 else:
-                    generate_config_smashbox(accounts_info["default"]["oc_account_name"],
+                  generate_config_smashbox(accounts_info["default"]["oc_account_name"],
                                              accounts_info["default"]["oc_account_password"], endpoint,
                                              ssl_enabled, this_host_config["kibana_activity"])
 
@@ -392,7 +393,7 @@ def get_occ_credentials(auth_files):
     """
     authfile = None
     accounts_info = dict()
-
+    
     for file in auth_files:
         try:
             authfile = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), file), 'rb')
@@ -439,7 +440,7 @@ def get_deploy_configuration():
 
     return deploy_configuration
 
-def load_config_files(auth_files=["auth-default.conf"], is_update=False):
+def load_config_files(auth_files, is_update=False):
     """ This method loads the config file "auth-default.conf" passed to
     the script as argument and the "deployment_architecture.csv"
     :return deploy_configuration with the architecture as a dict
