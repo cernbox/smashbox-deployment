@@ -492,5 +492,6 @@ if __name__== '__main__':
     # 6) Run smashbox
     endpoints_list = current_config["oc_endpoints"].split(",")
     # run all tests per endpoint
-    for endpoint in endpoints_list:
-        smash_run(endpoint)
+    if is_update:
+        for endpoint in endpoints_list:
+            smash_run(endpoint)
