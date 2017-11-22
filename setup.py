@@ -334,12 +334,12 @@ def check_oc_client_installation(config):
     """
     occ_path = get_oc_sync_cmd_path()
     if occ_path == "": # cernbox client not installed
-	    install_oc_client(config["oc_client"])
+        install_oc_client(config["oc_client"])
     else:
-   	    version_tuple = ocsync_version(get_oc_sync_cmd_path())
-   	    installed_version = str(version_tuple)[1:-1].replace(", ", ".")
+        version_tuple = ocsync_version(get_oc_sync_cmd_path())
+        installed_version = str(version_tuple)[1:-1].replace(", ", ".")
 
-   	 if (config["oc_client"] != installed_version): # TODO: check if it is needed to unistall previous version
+    if (config["oc_client"]!=installed_version): # TODO: check if it is needed to unistall previous version
         install_oc_client(config["oc_client"])  # update version
 
 def setup_config(deployment_config, accounts_info,is_update):
