@@ -281,7 +281,7 @@ def create_cron_job():
         print '\033[94m' + "Installing cron job at: " + job_time + '\033[0m'  + '\n'
         #user = os.popen("echo $USER").read().split("\n")[0]
 
-        file = open("/etc/cron.d/smashbox.cron")
+        file = open("/etc/cron.d/smashbox.cron","w+")
         import sys
         file.write(job_time + " " + sys.executable + " " + os.path.join(os.path.dirname(os.path.abspath(__file__)), "setup.py"))
         file.close()
