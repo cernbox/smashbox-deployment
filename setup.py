@@ -23,7 +23,7 @@ cbox_v = {
     "1.6.4": ["cernbox-1.6.4/CentOS_7/ownbrander:cernbox","1.6.4.1197","1.6.4.4043"],
     "2.0.1": ["cernboxtest-2.0.1/CentOS_7/ownbrander:cernbox","2.0.1.747","2.0.1.203"],
     "1.7.1": ["cernbox-1.7.1/CentOS_7/ownbrander:cernbox","1.7.1.1810","1.7.1.4505"],
-    "1.7.2": ["cernbox-1.7.2/CentOS_7/ownbrander:cernbox","1.7.2.2331","1.7.2.5046"],
+    "1.7.2": ["cernbox-1.7.2-oc_20150429/CentOS_7/oem:cernbox","1.7.2.2331","1.7.2.5046"],
     "1.8.3": ["cernbox-1.8.3/CentOS_7/ownbrander:cernbox","1.8.3.510","1.8.3.499"],
 }
 
@@ -213,7 +213,7 @@ def install_oc_client(version):
             cbox_pckg = "ownbrander:cernbox"
 
         shutil.copyfile(cbox_pckg + ".repo", "/etc/yum-puppet.repos.d/cernbox.repo")
-        os.system("yum update")
+        os.system("yum update -y")
         os.system("yum install cernbox-client -y")
         os.remove(cbox_pckg + ".repo")
 
@@ -268,8 +268,40 @@ def get_oc_sync_cmd_path():
 
     return path
 
-def backup_results(): # TODO: add the option to backup the test results
-    return True
+def get_free_space_mb(dirname):
+    import ctypes
+    import os
+    import platform
+    import sys
+
+    """Return folder/drive free space (in megabytes)."""
+    if platform.system() == 'Windows':
+        free_bytes = ctypes.c_ulonglong(0)
+        ctypes.windll.kernel32.GetDiskFreeSpaceExW(ctypes.c_wchar_p(dirname), None, None, ctypes.pointer(free_bytes))
+        return free_bytes.value / 1024 / 1024
+    else:
+        st = os.statvfs(dirname)
+        return st.f_bavail * st.f_frsize / 1024 / 1024
+
+def clean_smashdir(days): # TODO: add the option to backup the test results
+
+    smashdir = os.path.join(os.getcwd(),"smashbox-deployment","smashbox","etc","smashdir")
+    import time
+    now = time.time()
+    lastdate = days * 86400
+
+    for f in os.listdir(smashdir):
+
+        path = os.path.join(smashdir, f)
+
+        if os.stat(path).st_mtime < now - lastdate:
+            if os.path.isfile(path):
+                os.remove(path)
+            elif os.path.isdir(path):
+                shutil.rmtree(path)
+            else:
+                print "Clean up failed: Unrecognizable file: " + path
+                exit(0)
 
 def create_cron_job():
     """ This is the method to create the cron jobs
@@ -384,23 +416,23 @@ def get_occ_credentials(auth_files):
     authfile = None
     accounts_info = dict()
     if len(auth_files)>0:
-	for file in auth_files:
-	    try:
-               authfile = open(file, 'rb')
-	    except IOError:
-                print "Could not read file:", auth_files
+        for file in auth_files:
+            try:
+                   authfile = open(file, 'rb')
+            except IOError:
+                    print "Could not read file:", auth_files
 
-	    endpoint = file.split("auth-")[1].rsplit(".")[0]
+            endpoint = file.split("auth-")[1].rsplit(".")[0]
 
-	    accounts_info[endpoint] = {"oc_account_name": "", "oc_account_password": ""}
-	    for line in authfile:
-	        if line[0:len("oc_account_name = ")] == "oc_account_name = ":
-	           accounts_info[endpoint]["oc_account_name"] = line[len("oc_account_name = ")::].rsplit(',')[0]
-		if line[0:len("oc_account_password = ")] == "oc_account_password = ":
-		   accounts_info[endpoint]["oc_account_password"] = line[len("oc_account_password = ")::].rsplit(',')[0]
+            accounts_info[endpoint] = {"oc_account_name": "", "oc_account_password": ""}
+            for line in authfile:
+                if line[0:len("oc_account_name = ")] == "oc_account_name = ":
+                   accounts_info[endpoint]["oc_account_name"] = line[len("oc_account_name = ")::].rsplit(',')[0]
+            if line[0:len("oc_account_password = ")] == "oc_account_password = ":
+               accounts_info[endpoint]["oc_account_password"] = line[len("oc_account_password = ")::].rsplit(',')[0]
     else:
-	print "At least one auth-default.conf file is required"
-	exit(0)
+        print "At least one auth-default.conf file is required"
+    exit(0)
 
     return accounts_info
 
@@ -451,7 +483,7 @@ def parse_cmdline_args():
     parser.add_argument("--auth",
                         nargs='+',
                         help='accounts info config file',
-                        default=["/root/smashbox-deployment/auth-default.conf"])
+                        default=["/root/smashbox-deployment/auth-default.conf","/root/smashbox-deployment/auth-cboxsrv-boxed3.conf"])
     return parser
 
 if __name__== '__main__':
@@ -485,3 +517,7 @@ if __name__== '__main__':
     if is_update:
         for endpoint in endpoints_list:
             smash_run(endpoint)
+
+    # free up some space deleting old logs (10 days)
+    if 100L > get_free_space_mb(os.getcwd()):
+        clean_smashdir(10)
