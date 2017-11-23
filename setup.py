@@ -210,7 +210,10 @@ def install_oc_client(version):
         if  version == current_version:
             cbox_pckg = cbox_v[version][0]
         else:
-            cbox_pckg = "ownbrander:cernbox"
+            if cbox_v[version] == "1.7.2":
+                cbox_pckg = "oem:cernbox"
+            else:
+                cbox_pckg = "ownbrander:cernbox"
 
         shutil.copyfile(cbox_pckg + ".repo", "/etc/yum-puppet.repos.d/cernbox.repo")
         os.system("yum update -y")
