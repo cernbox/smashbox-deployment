@@ -210,7 +210,7 @@ def install_oc_client(version):
         if  version == current_version:
             cbox_pckg = cbox_v[version][0]
         else:
-            if cbox_v[version] == "1.7.2":
+            if version == "1.7.2":
                 cbox_pckg = "oem:cernbox"
             else:
                 cbox_pckg = "ownbrander:cernbox"
