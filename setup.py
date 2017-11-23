@@ -432,7 +432,7 @@ def get_occ_credentials(auth_files):
                accounts_info[endpoint]["oc_account_password"] = line[len("oc_account_password = ")::].rsplit(',')[0]
     else:
         print "At least one auth-default.conf file is required"
-    exit(0)
+        exit(0)
 
     return accounts_info
 
@@ -500,7 +500,7 @@ if __name__== '__main__':
         is_update = True
 
     remove_old_folders()
-    print(str(args.auth))
+
     # 1) Load the configutation files ( get updated deployment_architecture if is_update)
     deployment_config, accounts_info = load_config_files(args.auth, is_update)
     # 2) Setup smashbox and oc_client with the new/updated "deployment_architecture" and "auth" configuration
