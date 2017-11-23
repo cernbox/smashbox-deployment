@@ -368,8 +368,8 @@ def check_oc_client_installation(config):
         version_tuple = ocsync_version(get_oc_sync_cmd_path())
         installed_version = str(version_tuple)[1:-1].replace(", ", ".")
 
-    if (config["oc_client"]!=installed_version): # TODO: check if it is needed to unistall previous version
-        install_oc_client(config["oc_client"])  # update version
+        if (config["oc_client"]!=installed_version): # TODO: check if it is needed to unistall previous version
+            install_oc_client(config["oc_client"])  # update version
 
 def setup_config(deployment_config, accounts_info,is_update):
     """ This method installs oc_client and smashbox with the current host and
