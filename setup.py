@@ -205,20 +205,23 @@ def install_oc_client(version):
 
     if platform.system() == "Linux" or platform.system() == "linux2":  # linux
         print '\n' + '\033[94m' + "Installing cernbox client " + version + " for linux" + '\033[0m' + '\n'
-        wget.download("http://cernbox.cern.ch/cernbox/doc/Linux/" + cbox_v[version][0]+".repo")
+        wget.download("http://cernbox.cern.ch/cernbox/doc/Linux/centos7-cernbox.repo")
+        shutil.copyfile("centos7-cernbox.repo", "/etc/yum-puppet.repos.d/cernbox.repo")
 
-        if  version == current_version:
-            cbox_pckg = cbox_v[version][0]
-        else:
-            if version == "1.7.2":
-                cbox_pckg = "oem:cernbox"
-            else:
-                cbox_pckg = "ownbrander:cernbox"
+        #if  version == current_version:
+        #    cbox_pckg = cbox_v[version][0]
+        #else:
+        #    if version == "1.7.2":
+        #        cbox_pckg = "oem:cernbox"
+        #    else:
+        #        cbox_pckg = "ownbrander:cernbox"
+        os.system("sed -i s+/repo/+/cernbox-1.7.2-oc_20150429/+g /etc/yum-puppet.repos.d/cernbox.repo")
 
-        shutil.copyfile(cbox_pckg + ".repo", "/etc/yum-puppet.repos.d/cernbox.repo")
+        #shutil.copyfile(cbox_pckg + ".repo", "/etc/yum-puppet.repos.d/cernbox.repo")
+        os.system("yum clean all -y")
         os.system("yum update -y")
         os.system("yum install cernbox-client -y")
-        os.remove(cbox_pckg + ".repo")
+        os.remove("centos7-cernbox.repo")
 
     elif platform.system() == "darwin":  # MacOSX
         print '\033[94m' + "Installing cernbox client " + version + " for MAC OSX" + '\033[0m' + '\n'
