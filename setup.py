@@ -121,11 +121,14 @@ def send_and_check(document, monitoring_host,monitoring_port, should_fail=False)
 
 def this_repo_name():
     current_path = os.path.dirname(os.path.abspath(__file__))
-    git_config = open(os.path.join(current_path,".git","config"), 'rb')
+    if(os.path.exists(os.path.join(current_path,".git","config"))):
+        git_config = open(os.path.join(current_path,".git","config"), 'rb')
 
-    for line in git_config:
-        if line[0:len("	url = ")] == "	url = " :
-            return line[len("	url = ")::].split('\n')[0]
+        for line in git_config:
+            if line[0:len("	url = ")] == "	url = " :
+                return line[len("	url = ")::].split('\n')[0]
+    else:
+        return "cernbox/smashbox-deployment" # default repo
 
 this_repo =  this_repo_name()
 
