@@ -28,7 +28,7 @@ cbox_v = {
 }
 
 
-required_packages = ['urllib2','wget','pyoclient']
+required_packages = ['urllib2','wget','pyoclient','requests']
 
 if platform.system() == "Windows":
     required_packages.append('pycurl')
@@ -256,8 +256,11 @@ def generate_config_smashbox(oc_account_name, oc_account_password, endpoint, ssl
     f.write('oc_ssl_enabled = ' + ssl_enabled + '\n')
 
     oc_sync_path = get_oc_sync_cmd_path()
-    f.write('oc_sync_cmd = ' + '"{}"'.format(oc_sync_path) + '\n')
-
+    if platform.system()=='Windows':
+        f.write('oc_sync_cmd = ' + oc_sync_path + '\n')
+    else:
+        f.write('oc_sync_cmd = ' + '"{}"'.format(oc_sync_path) + '\n')
+        
     f.write('kibana_activity =' + '"{}"'.format(kibana_activity) + '\n')
 
     f.close()
