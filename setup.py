@@ -128,7 +128,7 @@ def this_repo_name():
             if line[0:len("	url = ")] == "	url = " :
                 return line[len("	url = ")::].split('\n')[0]
     else:
-        return "cernbox/smashbox-deployment" # default repo
+        return "https://github.com/cernbox/smashbox-deployment.git"# default repo
 
 this_repo =  this_repo_name()
 
@@ -257,7 +257,7 @@ def generate_config_smashbox(oc_account_name, oc_account_password, endpoint, ssl
 
     oc_sync_path = get_oc_sync_cmd_path()
     if platform.system()=='Windows':
-        f.write('oc_sync_cmd = ' + oc_sync_path + '\n')
+        f.write('oc_sync_cmd = ' + str(oc_sync_path) + '\n')
     else:
         f.write('oc_sync_cmd = ' + '"{}"'.format(oc_sync_path) + '\n')
         
