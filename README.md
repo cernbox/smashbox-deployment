@@ -42,9 +42,9 @@ If you want to set up a machine for continuos testing and monitoring with smashb
 
 smash-"platform"-"oc_client_version". For example: `smash-win10-233`
 
-###### (2) Indicate the configuration of each of these machines in `./deployment_architecture.csv`
+###### (2) Indicate the configuration of each of these machines in `deployment_architecture.csv`
 
-The `./deployment_architecture.csv` file is stored in an external repository, the link has been temporary hardcode in the variable `deployment_config_link`. It is stored in eos in `project/cernbox/smashbox` and it contains the following parameters:
+The `deployment_architecture.csv` file is stored in an external repository, the link has been temporary hardcode in the variable `deployment_config_link`. It is stored in eos in `project/cernbox/smashbox` and it contains the following parameters:
 
 
 |    hostname    |  platform | oc_client |      oc_enpoints                |     runtime     |  ssl_enabled        |  kibana_activity   |
@@ -63,8 +63,8 @@ python setup.py --auth auth-default.conf auth-endpointName.conf
 
 The auth.conf is a file required by the application with the following confidential information (owncloud login username and password):
 ```
-oc_account_name = user1  
-oc_account_password = password1
+oc_account_name = 'user1',  
+oc_account_password = 'password1',
 ```
 You need to define at least one `auth-default.conf` with occ username and password and another with the naming convenction: `auth-endpointName.conf`; where endpointName is the name of the endpoint that must use this username and password.  
 
