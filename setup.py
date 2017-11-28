@@ -187,7 +187,11 @@ def smash_check():
         print '\033[94m' + "Testing smashbox installation in " + str(socket.gethostname()) + " with " + endpoint + '\033[0m' + '\n'
         cmd = sys.executable + " " + current_path + "/smashbox/bin/smash " + current_path + "/smashbox/lib/test_nplusone.py  -c " + current_path +"/smashbox/etc/" + endpoint
         try:
-             os.system(cmd)
+             p = subprocess.Popen(cmd)
+             p.communicate()
+             if p.returncode !=0:
+                 print '\033[94m' +  "Smashbox installation failed: Non-zero exit code after running smashbox with " + endpoint  + '\033[0m' + '\n'
+                 exit(0)
         except Exception as e:
             print '\033[94m' +  "Smashbox installation failed: Non-zero exit code after running smashbox with " + endpoint  + '\033[0m' + '\n'
             print e
@@ -430,10 +434,13 @@ def get_occ_credentials(auth_files):
     if len(auth_files)>0:
         for file in auth_files:
             try:
+                if(os.path.exists(file)):
                    authfile = open(file, 'rb')
+                else:
+                    print "Incorrect path or file does not exist"
             except IOError:
                     print "Could not read file:", auth_files
-
+                    exit(0)
             endpoint = file.split("auth-")[1].rsplit(".")[0]
 
             accounts_info[endpoint] = {"oc_account_name": "", "oc_account_password": ""}
@@ -454,16 +461,20 @@ def get_deploy_configuration():
     :return deploy_configuration with the architecture as a dict
     """
     deploy_configuration= dict()
-    if os.path.exists("deployment_architecture.csv"): # update repo to get the new "deployment_architecture.csv"
+    if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)),"deployment_architecture.csv")): # update repo to get the new "deployment_architecture.csv"
         os.remove("deployment_architecture.csv")
+
     import wget
     wget.download(deployment_config_link)# get the deployment file
-    shutil.copyfile(os.path.join(os.getcwd(),"deployment_architecture.csv"),os.path.join(os.path.dirname(os.path.abspath(__file__)),"deployment_architecture.csv")) # this file needs to be in the same folder as this file
+    if not os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), "deployment_architecture.csv")):
+        shutil.copyfile(os.path.join(os.getcwd(),"deployment_architecture.csv"),os.path.join(os.path.dirname(os.path.abspath(__file__)),"deployment_architecture.csv")) # this file needs to be in the same folder as this file
 
-    deploy_file = [f for f in listdir(os.path.dirname(os.path.abspath(__file__))) if isfile(os.path.join(os.path.dirname(os.path.abspath(__file__)), f)) and f=='deployment_architecture.csv' ][0]
-    if deploy_file == "":
+    found_files = [f for f in listdir(os.path.dirname(os.path.abspath(__file__))) if isfile(os.path.join(os.path.dirname(os.path.abspath(__file__)), f)) and f=='deployment_architecture.csv' ]
+    if len(found_files)==0:
         print "Missing deployment configuration file: 'deployment_architecture.csv'"
         exit(0)
+    else:
+        deploy_file=found_files[0]
 
     if deploy_file[-3:] == "csv":
         try:
@@ -492,10 +503,13 @@ def load_config_files(auth_files, is_update=False):
 
 def parse_cmdline_args():
     parser = argparse.ArgumentParser(description='''Smashbox - This is a framework for end-to-end testing the core storage functionality of owncloud-based service installation ''')
+    authdef_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"auth-default.conf") # these are the default paths for the authnetication files
+    authboxed_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "auth-cboxsrv-boxed3.conf")
+    print authboxed_path
     parser.add_argument("--auth",
                         nargs='+',
                         help='accounts info config file',
-                        default=["/root/smashbox-deployment/auth-default.conf","/root/smashbox-deployment/auth-cboxsrv-boxed3.conf"])
+                        default=[authdef_path,authboxed_path])
     return parser
 
 if __name__== '__main__':
