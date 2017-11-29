@@ -16,15 +16,15 @@ deployment_config_link = "https://cernbox.cern.ch/index.php/s/65BChf3cbz7OoDe/do
 current_version = "2.3.3"
 # linux, macosx windows
 cbox_v = {
-    "2.3.3": ["centos7-cernbox","2.3.3.1807","2.3.3.1110"],
-    "2.2.4": ["cernbox-2.2.4.968-linux/CentOS_7/ownbrander:cernbox","2.2.4.1495","2.2.4.830"],
-    "2.1.1": ["cernbox-2.1.1.697-linux/CentOS_7/ownbrander:cernbox","2.1.1.1144","2.2.2.570"],
-    "2.0.2": ["cernbox-2.0.2.445-linux/CentOS_7/ownbrander:cernbox","2.0.2.782","2.0.2.236"],
-    "1.6.4": ["cernbox-1.6.4/CentOS_7/ownbrander:cernbox","1.6.4.1197","1.6.4.4043"],
-    "2.0.1": ["cernboxtest-2.0.1/CentOS_7/ownbrander:cernbox","2.0.1.747","2.0.1.203"],
-    "1.7.1": ["cernbox-1.7.1/CentOS_7/ownbrander:cernbox","1.7.1.1810","1.7.1.4505"],
-    "1.7.2": ["cernbox-1.7.2-oc_20150429/CentOS_7/oem:cernbox","1.7.2.2331","1.7.2.5046"],
-    "1.8.3": ["cernbox-1.8.3/CentOS_7/ownbrander:cernbox","1.8.3.510","1.8.3.499"],
+    "2.3.3": ["repo","2.3.3.1807","2.3.3.1110"],
+    "2.2.4": ["cernbox-2.2.4.968-linux","2.2.4.1495","2.2.4.830"],
+    "2.1.1": ["cernbox-2.1.1.697-linux","2.1.1.1144","2.2.2.570"],
+    "2.0.2": ["cernbox-2.0.2.445-linux","2.0.2.782","2.0.2.236"],
+    "1.6.4": ["cernbox-1.6.4","1.6.4.1197","1.6.4.4043"],
+    "2.0.1": ["cernboxtest-2.0.1","2.0.1.747","2.0.1.203"],
+    "1.7.1": ["cernbox-1.7.1","1.7.1.1810","1.7.1.4505"],
+    "1.7.2": ["cernbox-1.7.2-oc_20150429","1.7.2.2331","1.7.2.5046"],
+    "1.8.3": ["cernbox-1.8.3","1.8.3.510","1.8.3.499"],
 }
 
 
@@ -213,19 +213,8 @@ def install_oc_client(version):
     if platform.system() == "Linux" or platform.system() == "linux2":  # linux
         print '\n' + '\033[94m' + "Installing cernbox client " + version + " for linux" + '\033[0m' + '\n'
         wget.download("http://cernbox.cern.ch/cernbox/doc/Linux/centos7-cernbox.repo")
-        shutil.copyfile("centos7-cernbox.repo", "/etc/yum-puppet.repos.d/cernbox.repo")
-
-        #if  version == current_version:
-        #    cbox_pckg = cbox_v[version][0]
-        #else:
-        #    if version == "1.7.2":
-        #        cbox_pckg = "oem:cernbox"
-        #    else:
-        #        cbox_pckg = "ownbrander:cernbox"
-        os.system("sed -i s+/repo/+/cernbox-1.7.2-oc_20150429/+g /etc/yum-puppet.repos.d/cernbox.repo")
-
-        #shutil.copyfile(cbox_pckg + ".repo", "/etc/yum-puppet.repos.d/cernbox.repo")
-        os.system("yum clean all -y")
+        shutil.copyfile("centos7-cernbox.repo", "/etc/yum.repos.d/cernbox.repo")
+        os.system("sed -i s+/repo/+/" + cbox_v[version][0] + "/+g /etc/yum.repos.d/cernbox.repo")
         os.system("yum update -y")
         os.system("yum install cernbox-client -y")
         os.remove("centos7-cernbox.repo")
