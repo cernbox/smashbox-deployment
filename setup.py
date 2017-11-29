@@ -187,9 +187,9 @@ def smash_check():
         print '\033[94m' + "Testing smashbox installation in " + str(socket.gethostname()) + " with " + endpoint + '\033[0m' + '\n'
         cmd = sys.executable + " " + current_path + "/smashbox/bin/smash " + current_path + "/smashbox/lib/test_nplusone.py  -c " + current_path +"/smashbox/etc/" + endpoint
         try:
-             p = subprocess.Popen(cmd)
-             p.communicate()
-             if p.returncode !=0:
+             p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+             stdout,stderr = p.communicate()
+             if len(stderr)>0:
                  print '\033[94m' +  "Smashbox installation failed: Non-zero exit code after running smashbox with " + endpoint  + '\033[0m' + '\n'
                  exit(0)
         except Exception as e:
