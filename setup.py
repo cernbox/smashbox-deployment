@@ -175,6 +175,13 @@ def remove_old_folders():
     if os.path.exists(tmp_folder2) :  # if windows removed the "smashbox" folder (this folder is incorrectly leaved after updates)
         shutil.rmtree(tmp_folder2)
 
+    if os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)),"deployment_architecture.csv")): # update repo to get the new "deployment_architecture.csv"
+        os.remove(os.path.join(os.path.dirname(os.path.abspath(__file__)),"deployment_architecture.csv"))
+
+    if os.path.exists(os.path.join(os.getcwd(),"deployment_architecture.csv")): # update repo to get the new "deployment_architecture.csv"
+        os.remove(os.path.join(os.getcwd(),"deployment_architecture.csv"))
+
+
 ####### utilities for this installation script #################################################################################
 
 def smash_check():
