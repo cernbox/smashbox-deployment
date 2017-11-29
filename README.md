@@ -55,7 +55,11 @@ The `deployment_architecture.csv` file is stored in an external repository, the 
 
 Once the machine has been set up, the machine will be configured to read periodically from this configuration file to apply changes (if neccesary).
 
-###### (3) Enter in each VM and execute this installation script `setup.py` as follows:
+###### (3) Authentication files with occ credentials
+
+Create the authentication files auth-default.conf (following the template) and auth-endpointName.conf (if it is required). 
+
+###### (4) Enter in each VM and execute this installation script `setup.py` as follows:
 
 ```
 python setup.py --auth auth-default.conf auth-endpointName.conf
