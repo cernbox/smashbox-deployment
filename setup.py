@@ -189,8 +189,10 @@ def smash_check():
         try:
              p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
              stdout,stderr = p.communicate()
-             if len(stderr)>0:
+             if p.returncode != 0:
+                 print stderr
                  print '\033[94m' +  "Smashbox installation failed: Non-zero exit code after running smashbox with " + endpoint  + '\033[0m' + '\n'
+                 print "The smashbox return code is: " +  p.returncode
                  exit(0)
         except Exception as e:
             print '\033[94m' +  "Smashbox installation failed: Non-zero exit code after running smashbox with " + endpoint  + '\033[0m' + '\n'
