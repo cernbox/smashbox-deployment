@@ -397,7 +397,7 @@ def setup_config(deployment_config, accounts_info,is_update):
         print "this host has been removed from the configuration files; please manually delete this vm"  + '\n'
         exit(0)
     else:
-        download_repository("https://github.com/cernbox/smashbox.git")
+        download_repository("https://github.com/yolanda93/smashbox.git")
 
         check_oc_client_installation(this_host_config)
 
