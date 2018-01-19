@@ -538,7 +538,7 @@ if __name__== '__main__':
     if is_update:
         for endpoint in endpoints_list:
             smash_run(endpoint)
-
-    # free up some space deleting old logs (10 days)
-    if 100L > get_free_space_mb(os.getcwd()):
-        clean_smashdir(10)
+            
+            # free up some space deleting old logs (10 days)
+            if 500L > get_free_space_mb(os.getcwd()):
+               clean_smashdir(10)
