@@ -71,6 +71,27 @@ for pkg in required_packages:
 
 ####### monitoring utilities to publish deployment state in kibana ############################################################
 
+def change_activity_to_production(this_host_config,endpoint):
+
+    # Change the kibana activity to production (This parameter is defined in smashbox.conf file)
+    smash_conf_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "smashbox", "etc",
+                                       endpoint)
+
+    from shutil import copyfile
+    tmp = os.path.join(os.path.dirname(os.path.abspath(__file__)), "smashbox", "etc",
+                                       endpoint + ".tmp")
+    copyfile(smash_conf_path, tmp)
+
+    with open(tmp, 'r') as input_file, open(smash_conf_path, 'w') as output_file:
+        for line in input_file:
+            if line[0:len("kibana_activity = ")] == "kibana_activity = ":
+                output_file.write("kibana_activity = " +  '"{}"'.format(this_host_config["kibana_activity"]) + "\n")
+            else:
+                output_file.write(line)
+
+    os.remove(tmp) # remove tmp file
+
+
 def get_monitoring_host():
     """
     Get kibana parameters defined in smashbox.conf
@@ -184,7 +205,7 @@ def remove_old_folders():
 
 ####### utilities for this installation script #################################################################################
 
-def smash_check():
+def smash_check(this_host_config):
 
     current_path = os.path.dirname(os.path.abspath(__file__))
 
@@ -193,16 +214,22 @@ def smash_check():
     for endpoint in test_endpoints:
         print '\033[94m' + "Testing smashbox installation in " + str(socket.gethostname()) + " with " + endpoint + '\033[0m' + '\n'
         cmd = sys.executable + " " + current_path + "/smashbox/bin/smash " + current_path + "/smashbox/lib/test_nplusone.py  -c " + current_path +"/smashbox/etc/" + endpoint
+        change_activity_to_production(this_host_config, endpoint)
         try:
              p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
              stdout,stderr = p.communicate()
              if p.returncode != 0:
                  print stderr
                  print '\033[94m' +  "Smashbox installation failed: Non-zero exit code after running smashbox with " + endpoint  + '\033[0m' + '\n'
+             else:
+                 print '\033[94m' + "Smashbox installation success! with " + endpoint + '\033[0m' + '\n'
+
         except Exception as e:
             print '\033[94m' +  "Smashbox installation failed: Non-zero exit code after running smashbox with " + endpoint  + '\033[0m' + '\n'
             print e
-        print '\033[94m' + "Smashbox installation success! with " +  endpoint  + '\033[0m' + '\n'
+
+
+
 
 def smash_run(endpoint):
     print '\033[94m' + "Running smashbox in " +  str(socket.gethostname()) + '\033[0m' + '\n'
@@ -259,8 +286,8 @@ def generate_config_smashbox(oc_account_name, oc_account_password, endpoint, ssl
         f.write('oc_sync_cmd = ' + str(oc_sync_path) + '\n')
     else:
         f.write('oc_sync_cmd = ' + '"{}"'.format(oc_sync_path) + '\n')
-        
-    f.write('kibana_activity =' + '"{}"'.format(kibana_activity) + '\n')
+
+    f.write('kibana_activity = ' + '"{}"'.format("smashbox-deploy-test") + '\n')# this is temporary. If everything runs ok it will get the activity defined in architecture_deployment.csv conf file
 
     f.close()
 
@@ -318,16 +345,17 @@ def create_cron_job():
     """ This is the method to create the cron jobs
     """
     if platform.system() != "Windows":
-
-        runtime = current_config['runtime'].split(":")
-        job_time = runtime[1] + " " + runtime[0] + " * * *"
-        print '\033[94m' + "Installing cron job at: " + job_time + '\033[0m'  + '\n'
-        #user = os.popen("echo $USER").read().split("\n")[0]
-
-        file = open("/etc/cron.d/smashbox.cron","w+")
+        from crontab import CronTab
+        my_cron = CronTab("root")
         import sys
-        file.write(job_time + " " + sys.executable + " " + os.path.join(os.path.dirname(os.path.abspath(__file__)), "setup.py"))
-        file.close()
+   
+        runtime = current_config['runtime'].split(":")
+        job = my_cron.new(command=sys.executable + " " + os.path.join(os.path.dirname(os.path.abspath(__file__)), "setup.py") + " >> " + "/tmp/smash-cron-" + runtime[0] + ":" + runtime[1] + ".log")
+
+        job_time = runtime[1] + " " + runtime[0] + " * * *"
+        job.setall(str(job_time))
+        print '\033[94m' + "Installing cron job at: " + job_time + '\033[0m'  + '\n'
+        my_cron.write()
 
     else:
         import sys
@@ -496,11 +524,27 @@ def load_config_files(auth_files, is_update=False):
 
     return deploy_configuration, accounts_info
 
+def check_privileges():
+    print("Administrative permissions required. Detecting permissions..." + '\n')
+    error = 0
+    user = "root"
+    if platform.system()!="Windows":
+        user = os.popen("echo $USER").read().split("\n")[0]
+    else:
+        error = os.system("net session >nul 2>&1")
+
+    if error !=0 or user!="root":
+        print "Failure: Current permissions inadequate." + '\n'
+        exit(0)
+    else:
+        print "Success: Administrative permissions confirmed!" + '\n'
+
+
 def parse_cmdline_args():
     parser = argparse.ArgumentParser(description='''Smashbox - This is a framework for end-to-end testing the core storage functionality of owncloud-based service installation ''')
     authdef_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),"auth-default.conf") # these are the default paths for the authnetication files
     authboxed_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "auth-cboxsrv-boxed3.conf")
-    print authboxed_path
+
     parser.add_argument("--auth",
                         nargs='+',
                         help='accounts info config file',
@@ -513,6 +557,8 @@ if __name__== '__main__':
         args = parser.parse_args()
     except Exception as e:
         sys.stdout.write("Check command line arguments (%s)" % e.strerror)
+
+    check_privileges()
 
     is_update = False
     current_config = dict()
@@ -527,7 +573,7 @@ if __name__== '__main__':
     # 2) Setup smashbox and oc_client with the new/updated "deployment_architecture" and "auth" configuration
     current_config = setup_config(deployment_config, accounts_info, is_update)
     # 3) Check smashbox installation
-    smash_check()
+    smash_check(current_config)
     # 4) Publish new deployment architecture info into kibana dashboard
     publish_deployment_state(current_config)
     # 5) install cron job
@@ -538,7 +584,7 @@ if __name__== '__main__':
     if is_update:
         for endpoint in endpoints_list:
             smash_run(endpoint)
-
-    # free up some space deleting old logs (10 days)
-    if 100L > get_free_space_mb(os.getcwd()):
-        clean_smashdir(10)
+            
+            # free up some space deleting old logs (1 days)
+            if 500L > get_free_space_mb(os.getcwd()):
+               clean_smashdir(1)
