@@ -348,7 +348,7 @@ def create_cron_job():
         from crontab import CronTab
         my_cron = CronTab("root")
         import sys
-   
+
         runtime = current_config['runtime'].split(":")
         job = my_cron.new(command=sys.executable + " " + os.path.join(os.path.dirname(os.path.abspath(__file__)), "setup.py") + " >> " + "/tmp/smash-cron-" + runtime[0] + ":" + runtime[1] + ".log")
 
@@ -584,7 +584,7 @@ if __name__== '__main__':
     if is_update:
         for endpoint in endpoints_list:
             smash_run(endpoint)
-            
+
             # free up some space deleting old logs (1 days)
             if 500L > get_free_space_mb(os.getcwd()):
                clean_smashdir(1)
