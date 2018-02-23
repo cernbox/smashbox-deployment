@@ -363,7 +363,7 @@ def create_cron_job():
         print '\033[94m' + "Installing cron job at: " + str(current_config['runtime']) + '\033[0m'  + '\n'
         this_exec_path =  os.path.join(os.path.dirname(os.path.abspath(__file__)),"setup.py")
 
-        cmd = "schtasks /Create /SC DAILY /TN Smashbox /ST " + current_config['runtime'] + " /TR " + this_exec_path + " /F" # /F is to force the overwrite of the existing scheduled task
+        cmd = "schtasks /Create /SC DAILY /RU system /TN Smashbox /RL HIGHEST /ST " + current_config['runtime'] + " /TR " + this_exec_path + " /F" # /F is to force the overwrite of the existing scheduled task
         process = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         stdout, stderr = process.communicate()
         if (len(stderr) > 0):
