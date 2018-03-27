@@ -323,7 +323,8 @@ def get_free_space_mb(dirname):
 
 def clean_smashdir(days): # TODO: add the option to backup the test results
 
-    smashdir = os.path.join(os.getcwd(),"smashbox-deployment","etc","smashdir")
+    #smashdir = os.path.join(os.getcwd(),"smashbox-deployment","etc","smashdir")
+    smashdir = "C:\\smashdir\\"
     import time
     now = time.time()
     lastdate = days * 86400
