@@ -48,13 +48,33 @@ Instructions
 
 If you want to set up a machine for continuos testing and monitoring with smashbox, you can execute the corresponding setup script depending your OS. This script is developed to automatically and dinamically install the OwnCloud client, configure smashbox and install the cron job. The steps to use these scripts are the following:
 
-<h4> Windows </h4>
+<h4> WINDOWS </h4>
 
-###### (3) Authentication files with occ credentials
+###### (1) Download and install python 2.7:
+Python 2.7 is required. You can download it here: https://www.python.org/downloads/windows/ 
 
-Create the authentication files auth-default.conf (following the template) and auth-endpointName.conf (if it is required). 
+###### (2) Download and install git: 
+You can download and install git here: https://git-scm.com/download/win
 
-###### (4) Enter in each VM and execute this installation script `setup.py` as follows:
+###### (3) Run git bash as administrator:
+In Windows search tab search for 'Git Bash', right click and open as administrator
+
+###### (4) Clone smashbox repository:
+In git bash run: git clone https://github.com/cernbox/smashbox-deployment.git
+
+###### (5) Modify if you need the time of cronjobs:
+In win-setup.py, 2 variables run_time and cleanup_time indicate what time should the smashbox and cleaup processes run. You can modify them to the time you want.
+
+###### (6) Open cmd as administrator:
+In Windows search tab search for 'Command Prompt', right click and open as administrator
+
+###### (7) Locate and change current directory in cmd:
+Locate where you cloned the smashbox-deployment folder, from cmd 'cd' in the deployment folder
+
+###### (8) Run setup script:
+C:\Python27\python.exe win-setup.py -v VERSION -u USERNAME -p PASSWORD -k KIBANA_ACTIVITY
+Where 'VERSION' is the cernbox client version you want, 'USERNAME/PASSWORD' are your credentials for cernbox and 'KIBANA_ACTIVITY' is variable so 'Kibana-Monitoring' can identify the data that are sent. It is described bellow in monitoring section.
+
 
 
 <h3 id="Docker">Deploy and set up a testing cluster of containers (Docker)</h3>
