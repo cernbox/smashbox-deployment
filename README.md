@@ -46,24 +46,9 @@ Instructions
 
 <h3 id="Openstack"> Deploy and set up a testing cluster of VMs (Openstack)</h3>
 
-If you want to set up a machine for continuos testing and monitoring with smashbox, you can execute the script `setup.py`. This script is developed to automatically and dinamically install the OwnCloud client, configure smashbox and install the cron job. The steps to use this script are the followings:
+If you want to set up a machine for continuos testing and monitoring with smashbox, you can execute the corresponding setup script depending your OS. This script is developed to automatically and dinamically install the OwnCloud client, configure smashbox and install the cron job. The steps to use these scripts are the following:
 
-###### (1) Manually create a set of VMs in OpenStack. These VMs should follow the naming convention:
-
-smash-"platform"-"oc_client_version". For example: `smash-win10-233`
-
-###### (2) Indicate the configuration of each of these machines in `deployment_architecture.csv`
-
-The `deployment_architecture.csv` file is stored in an external repository, the link has been temporary hardcode in the variable `deployment_config_link`. It is stored in eos in `project/cernbox/smashbox` and it contains the following parameters:
-
-
-|    hostname    |  platform | oc_client |      oc_enpoints                |     runtime     |  ssl_enabled        |  kibana_activity   |
-|:--------------:|:---------:|:---------:|:-------------------------------:|:---------------:|---------------------:|-------------------:|
-| osx-buildnode  |   MacOSX  |   2.3.3   |   "oc_endpoint1, oc_endpoint2"  |      20:00      |    "True, False"     |   smashbox-deploy  |
-
-
-
-Once the machine has been set up, the machine will be configured to read periodically from this configuration file to apply changes (if neccesary).
+<h4> Windows </h4>
 
 ###### (3) Authentication files with occ credentials
 
@@ -71,18 +56,6 @@ Create the authentication files auth-default.conf (following the template) and a
 
 ###### (4) Enter in each VM and execute this installation script `setup.py` as follows:
 
-```
-python setup.py --auth auth-default.conf auth-endpointName.conf
-```
-
-The auth.conf is a file required by the application with the following confidential information (owncloud login username and password):
-```
-oc_account_name = 'user1',  
-oc_account_password = 'password1',
-```
-You need to define at least one `auth-default.conf` with occ username and password and another with the naming convenction: `auth-endpointName.conf`; where endpointName is the name of the endpoint that must use this username and password.  
-
-Note: Alternatively, you can manually set up the machine with the documentation available in `documentation`.
 
 <h3 id="Docker">Deploy and set up a testing cluster of containers (Docker)</h3>
 
