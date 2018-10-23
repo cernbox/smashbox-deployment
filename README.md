@@ -63,17 +63,18 @@ In Windows search tab search for 'Git Bash', right click and open as administrat
 In git bash run: git clone https://github.com/cernbox/smashbox-deployment.git
 
 ###### (5) Modify if you need the time of cronjobs:
-In win-setup.py, 2 variables run_time and cleanup_time indicate what time should the smashbox and cleaup processes run. You can modify them to the time you want.
+In `win-setup.py`, 2 variables run_time and cleanup_time indicate what time should the smashbox and cleaup processes run. You can modify them to the time you want.
 
 ###### (6) Open cmd as administrator:
 In Windows search tab search for 'Command Prompt', right click and open as administrator
 
 ###### (7) Locate and change current directory in cmd:
-Locate where you cloned the smashbox-deployment folder, from cmd 'cd' in the deployment folder
+Locate where you cloned the smashbox-deployment folder, from cmd `cd` in the deployment folder
 
 ###### (8) Run setup script:
-C:\Python27\python.exe win-setup.py -v VERSION -u USERNAME -p PASSWORD -k KIBANA_ACTIVITY
-Where 'VERSION' is the cernbox client version you want, 'USERNAME/PASSWORD' are your credentials for cernbox and 'KIBANA_ACTIVITY' is variable so 'Kibana-Monitoring' can identify the data that are sent. It is described bellow in monitoring section.
+From cmd run the following command:
+`C:\Python27\python.exe win-setup.py -v VERSION -u USERNAME -p PASSWORD -k KIBANA_ACTIVITY`
+Where `VERSION` is the cernbox client version you want, `USERNAME/PASSWORD` are your credentials for cernbox and `KIBANA_ACTIVITY` is variable so 'Kibana-Monitoring' can identify the data that are sent. It is described bellow in monitoring section.
 
 
 
