@@ -17,12 +17,22 @@ This repository is organised in the following way:
 
 <pre>
    smashbox-deployment
-   ├── documentation/       : procedures to manually set up a machine for continuos testing and monitoring
-   ├── docker/              : scripts, docker files and configuration used to automatically deploy and continuosly run smashbox tests in a set of containers
-   │   └── Dockerfiles/     : dockerfiles used to build different images for each platform
-   │   └── setup.d          : these are the main scripts used to deploy the specified architecture
-   ├── kibana/              : this folder contains json files that stores kibana dashboards configurations
-   ├── setup.py             : this is the script used to set up automatically the machine
+   ├── documentation/         : procedures to manually set up a machine for continuos testing and monitoring
+   ├── docker/                : scripts, docker files and configuration used to automatically deploy and continuosly run smashbox tests in a set of containers
+   │   └── Dockerfiles/       : dockerfiles used to build different images for each platform
+   │   └── setup.d            : these are the main scripts used to deploy the specified architecture
+   ├── kibana/                : this folder contains json files that stores kibana dashboards configurations
+   ├── setup/                 : this folder contains setup scripts and tools to automatically setup the machine
+       └── auto-smashbox.conf : default configuration file for smashbox
+       └── cbox_vers.json     : json table which contains all available cernbox client versions for each platform
+       └── cleanup.py         : script to clean up space in Windows
+       └── cleanup.sh         : script to clean up space in Linux/Mac
+       └── get_vers.py        : script to extract correct cernbox version form json table
+       └── linux_distr.py     : script to extract OS platform version
+       └── setup.sh           : setup script for Linux-CC7
+       └── ubuntu-setup.sh    : setup script for Linux-Ubuntu
+       └── update_repo.py     : script to update smashbox repositor in Windows
+       └── win-setup.py       : setup script for Windows
    └── README               : this file
 
 </pre>
