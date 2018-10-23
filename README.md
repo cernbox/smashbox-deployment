@@ -74,7 +74,6 @@ Locate where you cloned the smashbox-deployment folder, from cmd `cd` in the dep
 ###### (8) Run setup script:
 From cmd run the following command:
 `C:\Python27\python.exe win-setup.py -v VERSION -u USERNAME -p PASSWORD -k KIBANA_ACTIVITY`
-Where `VERSION` is the cernbox client version you want, `USERNAME/PASSWORD` are your credentials for cernbox and `KIBANA_ACTIVITY` is variable so 'Kibana-Monitoring' can identify the data that are sent. It is described bellow in monitoring section.
 
 <h4> LINUX-CC7 </h4>
 
@@ -92,6 +91,8 @@ In terminal: `cd smashbox_setup/`
 
 ###### (5) Run setup script:
 In terminal run the following command: `./setup.sh -v VERSION -u USERNAME -p PASSWORD -k KIBANA_ACTIVITY`
+
+** `VERSION` is the cernbox client version you want, `USERNAME/PASSWORD` are your credentials for cernbox and `KIBANA_ACTIVITY` is variable so 'Kibana-Monitoring' can identify the data that are sent. It is described bellow in monitoring section.
 
 
 <h3 id="Docker">Deploy and set up a testing cluster of containers (Docker)</h3>
