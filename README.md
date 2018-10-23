@@ -71,7 +71,7 @@ In `win-setup.py`, 2 variables run_time and cleanup_time indicate what time shou
 In Windows search tab search for 'Command Prompt', right click and open as administrator
 
 ###### (7) Locate and change current directory in cmd:
-Locate where you cloned the smashbox-deployment folder, from cmd `cd` in the deployment folder
+Locate where you cloned the smashbox-deployment folder, from cmd `cd` in the `smashbox-deployment/setup/` folder
 
 ###### (8) Run setup script:
 From cmd run the following command:
@@ -89,7 +89,7 @@ In terminal run the following command: `sudo yum install git`
 In terminal run the following command: git clone https://github.com/cernbox/smashbox-deployment.git
 
 ###### (4) Change current directory in terminal to the directory you cloned:
-In terminal: `cd smashbox_setup/`
+In terminal: `cd `smashbox-deployment/setup/``
 
 ###### (5) Run setup script:
 In terminal run the following command: `./setup.sh -v VERSION -u USERNAME -p PASSWORD -k KIBANA_ACTIVITY`
