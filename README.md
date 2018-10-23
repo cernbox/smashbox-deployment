@@ -37,6 +37,8 @@ This repository is organised in the following way:
 
 </pre>
 
+** `cbox_vers.json` is a table with 3 columns. 1st column is version for Linux, 2nd for MacOS and 3rd for Windows.
+
 Instructions
 =================
   - [Deploy and set up a testing cluster of VMs (Openstack)](#Openstack)
