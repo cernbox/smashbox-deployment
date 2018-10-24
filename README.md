@@ -42,6 +42,8 @@ This repository is organised in the following way:
 Instructions
 =================
   - [Deploy and set up a testing cluster of VMs (Openstack)](#Openstack)
+    └── [Windows setup](#Windows)
+    └── [linux-CC7 setup](#cc7)
   - [Deploy and set up a testing cluster of containers (Docker)](#Docker)
   - [Monitoring and Analysis with kibana](#Monitoring)
 
@@ -49,7 +51,7 @@ Instructions
 
 If you want to set up a machine for continuos testing and monitoring with smashbox, you can execute the corresponding setup script depending your OS. This script is developed to automatically and dinamically install the OwnCloud client, configure smashbox and install the cron job. The steps to use these scripts are the following:
 
-<h4> WINDOWS </h4>
+<h4 id="Windows"> WINDOWS </h4>
 
 ###### (1) Download and install python 2.7:
 Python 2.7 is required. You can download it here: https://www.python.org/downloads/windows/ 
@@ -76,7 +78,7 @@ Locate where you cloned the smashbox-deployment folder, from cmd `cd` in the `sm
 From cmd run the following command:
 `C:\Python27\python.exe win-setup.py -v VERSION -u USERNAME -p PASSWORD -k KIBANA_ACTIVITY`
 
-<h4> LINUX-CC7 </h4>
+<h4 id="cc7"> LINUX-CC7 </h4>
 
 ###### (1) Install python 2.7:
 Python 2.7 is required. If your machine is an openstack VM then python 2.7 is already installed. Else you need to download and install python 2.7.
