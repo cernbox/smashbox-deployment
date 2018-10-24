@@ -41,15 +41,17 @@ This repository is organised in the following way:
 
 Instructions
 =================
-  - [Deploy and set up a testing cluster of VMs (Openstack)](#Openstack)
-  - [Deploy and set up a testing cluster of containers (Docker)](#Docker)
-  - [Monitoring and Analysis with kibana](#Monitoring)
+  - [Deploy and set up a testing cluster of VMs (Openstack)](#openstack)
+    - [Windows setup](#windows)
+    - [linux-CC7 setup](#cc7)
+  - [Deploy and set up a testing cluster of containers (Docker)](#docker)
+  - [Monitoring and Analysis with kibana](#monitoring)
 
-<h3 id="Openstack"> Deploy and set up a testing cluster of VMs (Openstack)</h3>
+<h3 id="openstack"> Deploy and set up a testing cluster of VMs (Openstack)</h3>
 
 If you want to set up a machine for continuos testing and monitoring with smashbox, you can execute the corresponding setup script depending your OS. This script is developed to automatically and dinamically install the OwnCloud client, configure smashbox and install the cron job. The steps to use these scripts are the following:
 
-<h4> WINDOWS </h4>
+<h4 id="windows"> WINDOWS </h4>
 
 ###### (1) Download and install python 2.7:
 Python 2.7 is required. You can download it here: https://www.python.org/downloads/windows/ 
@@ -76,7 +78,7 @@ Locate where you cloned the smashbox-deployment folder, from cmd `cd` in the `sm
 From cmd run the following command:
 `C:\Python27\python.exe win-setup.py -v VERSION -u USERNAME -p PASSWORD -k KIBANA_ACTIVITY`
 
-<h4> LINUX-CC7 </h4>
+<h4 id="cc7"> LINUX-CC7 </h4>
 
 ###### (1) Install python 2.7:
 Python 2.7 is required. If your machine is an openstack VM then python 2.7 is already installed. Else you need to download and install python 2.7.
@@ -88,7 +90,7 @@ In terminal run the following command: `sudo yum install git`
 In terminal run the following command: git clone https://github.com/cernbox/smashbox-deployment.git
 
 ###### (4) Change current directory in terminal to the directory you cloned:
-In terminal: `cd `smashbox-deployment/setup/``
+In terminal: `cd smashbox-deployment/setup/`
 
 ###### (5) Run setup script:
 In terminal run the following command: `./setup.sh -v VERSION -u USERNAME -p PASSWORD -k KIBANA_ACTIVITY`
@@ -96,7 +98,7 @@ In terminal run the following command: `./setup.sh -v VERSION -u USERNAME -p PAS
 ** `VERSION` is the cernbox client version you want, `USERNAME/PASSWORD` are your credentials for cernbox and `KIBANA_ACTIVITY` is variable so 'Kibana-Monitoring' can identify the data that are sent. It is described bellow in monitoring section.
 
 
-<h3 id="Docker">Deploy and set up a testing cluster of containers (Docker)</h3>
+<h3 id="docker">Deploy and set up a testing cluster of containers (Docker)</h3>
 
 If you want to set up the cluster with containers. You should run the following commands:
 ```
@@ -116,7 +118,7 @@ The `docker build` should make reference to the dockerfile with the image desire
   SMASHBOX_SSL_ENABLED
 ```
 
-<h3 id="Monitoring">Monitoring and Analysis with kibana</h3>
+<h3 id="monitoring">Monitoring and Analysis with kibana</h3>
 
 The goal of this section is to provide a convenient monitoring tool for the deployed smashbox testing architecture. For this purpose it has been choosen kibana for visualization and elasticsearch to store tests results.
 
