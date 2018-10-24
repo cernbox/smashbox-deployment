@@ -132,10 +132,10 @@ The kibana web interface is accessible in https://monit-kibana.cern.ch.
 
 If you don't have yet the dashboard configured. You can download the json file `kibana\cernbox-smashbox.json`; then you need to go to the tab "management" in kibana and import this json file as a saved of object.
 
-![Alt text](/documentation/img/import-kibana-dashboard.png?raw=true "import-kibana-dashboard")
+![Alt text](/kibana/img/import-kibana-dashboard.png?raw=true "import-kibana-dashboard")
 
 The dashboard has been designed to monitor the failed tests running smashbox with different OwnCloud client versions and different platforms. For regression testing, tests are executed periodically according to the csv file provided in the deployment and the  schedule specified there.
 
-![Alt text](/documentation/img/smashbox-dashboard.png?raw=true "smashbox-dashboard")
+![Alt text](/kibana/img/smashbox-dashboard.png?raw=true "smashbox-dashboard")
 
 ** Note: This section is based on the current deployed ELK architecture at CERN. In order to easily deploy an ELK architecture there is a document describing the procedure `kibana/elk-docker.pdf`.
