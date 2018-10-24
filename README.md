@@ -42,8 +42,8 @@ This repository is organised in the following way:
 Instructions
 =================
   - [Deploy and set up a testing cluster of VMs (Openstack)](#Openstack)
-    └── [Windows setup](#Windows)
-    └── [linux-CC7 setup](#cc7)
+    - [Windows setup](#Windows)
+    - [linux-CC7 setup](#cc7)
   - [Deploy and set up a testing cluster of containers (Docker)](#Docker)
   - [Monitoring and Analysis with kibana](#Monitoring)
 
