@@ -51,6 +51,8 @@ Instructions
 
 If you want to set up a machine for continuos testing and monitoring with smashbox, you can execute the corresponding setup script depending your OS. This script is developed to automatically and dinamically install the OwnCloud client, configure smashbox and install the cron job. The steps to use these scripts are the following:
 
+** After creation of a new Windows VM you have to contact CDA to remove the machine form their automatic cernbox client update campaign.
+
 <h4 id="windows"> WINDOWS </h4>
 
 ###### (1) Download and install python 2.7:
